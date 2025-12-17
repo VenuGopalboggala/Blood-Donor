@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./SeekerForm.css";
 
+// ONLY CHANGE: Added dynamic API URL for live deployment
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 export default function SeekerDashboard() {
   const [view, setView] = useState("request");
 
@@ -18,7 +21,8 @@ export default function SeekerDashboard() {
     try {
       const seekerId = localStorage.getItem("userId");
 
-      await axios.post("http://localhost:3001/api/blood-request", {
+      // UPDATED LINK: Using API_BASE_URL instead of localhost
+      await axios.post(`${API_BASE_URL}/api/blood-request`, {
         seekerId,
         seekerName: name,
         bloodType,

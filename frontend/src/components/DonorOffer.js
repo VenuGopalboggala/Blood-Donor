@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./donorOffer.css";
 
+// ONLY CHANGE: Added dynamic API URL for live deployment
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 export default function DonorOffer() {
   const [location, setLocation] = useState("");
   const [message, setMessage] = useState("");
@@ -18,7 +21,8 @@ export default function DonorOffer() {
         return;
       }
 
-      const res = await axios.post("http://localhost:3001/api/donor-offer", {
+      // UPDATED LINK: Using API_BASE_URL instead of localhost
+      const res = await axios.post(`${API_BASE_URL}/api/donor-offer`, {
         donorId,
         location,
         message,

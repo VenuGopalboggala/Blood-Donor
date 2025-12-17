@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// ONLY CHANGE: Added dynamic API URL for live deployment
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 export default function DonationHistory() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +16,8 @@ export default function DonationHistory() {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/api/donations", {
+      // UPDATED LINK: Using API_BASE_URL instead of localhost
+      const res = await axios.get(`${API_BASE_URL}/api/donations`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setHistory(res.data);

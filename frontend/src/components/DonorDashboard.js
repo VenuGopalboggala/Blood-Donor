@@ -1,7 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./donorDashboard.css";
+
+// ONLY CHANGE: Added dynamic API URL for live deployment
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
 export default function DonorDashboard() {
   const donorId = localStorage.getItem("userId");
@@ -15,8 +17,9 @@ export default function DonorDashboard() {
 
   async function loadRequests() {
     try {
+      // UPDATED LINK: Using API_BASE_URL instead of localhost
       const res = await axios.get(
-        `http://localhost:3001/api/blood-request/donor/${donorId}`
+        `${API_BASE_URL}/api/blood-request/donor/${donorId}`
       );
 
       setRequests(res.data);
@@ -36,12 +39,14 @@ export default function DonorDashboard() {
   }
 
   async function accept(id) {
-    await axios.put(`http://localhost:3001/api/blood-request/accept/${id}`);
+    // UPDATED LINK: Using API_BASE_URL instead of localhost
+    await axios.put(`${API_BASE_URL}/api/blood-request/accept/${id}`);
     loadRequests();
   }
 
   async function reject(id) {
-    await axios.put(`http://localhost:3001/api/blood-request/reject/${id}`);
+    // UPDATED LINK: Using API_BASE_URL instead of localhost
+    await axios.put(`${API_BASE_URL}/api/blood-request/reject/${id}`);
     loadRequests();
   }
 

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./Login.css";   // <-- IMPORTANT: include new CSS file
+import "./Login.css";
+
+// ONLY CHANGE: Created a dynamic base URL for the API
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
 function Login({ onLogin }) {
   const [isLoginView, setIsLoginView] = useState(true);
@@ -19,16 +22,9 @@ function Login({ onLogin }) {
   const [error, setError] = useState("");
 
   const resetForm = () => {
-    setEmail("");
-    setPassword("");
-    setName("");
-    setBloodType("");
-    setCity("");
-    setHospitalName("");
-    setContactPhone("");
-    setLat("");
-    setLng("");
-    setError("");
+    setEmail(""); setPassword(""); setName(""); setBloodType("");
+    setCity(""); setHospitalName(""); setContactPhone("");
+    setLat(""); setLng(""); setError("");
   };
 
   const handleToggleView = () => {
@@ -47,11 +43,11 @@ function Login({ onLogin }) {
 
     const userType = isDonor ? "donor" : "seeker";
 
-    // LOGIN
+    // UPDATED LINK FOR LOGIN
     if (isLoginView) {
       try {
         const response = await axios.post(
-          `http://localhost:3001/api/auth/login/${userType}`,
+          `${API_BASE_URL}/api/auth/login/${userType}`,
           { email, password }
         );
 
@@ -64,25 +60,18 @@ function Login({ onLogin }) {
 
     // REGISTRATION
     let registrationData;
-
     if (isDonor) {
       registrationData = { name, email, password, bloodType, city };
     } else {
       registrationData = {
-        name,
-        email,
-        password,
-        bloodType,
-        hospitalName,
-        contactPhone,
-        lat,
-        lng,
+        name, email, password, bloodType, hospitalName, contactPhone, lat, lng,
       };
     }
 
+    // UPDATED LINK FOR REGISTRATION
     try {
       await axios.post(
-        `http://localhost:3001/api/auth/register/${userType}`,
+        `${API_BASE_URL}/api/auth/register/${userType}`,
         registrationData
       );
 
@@ -97,112 +86,38 @@ function Login({ onLogin }) {
   return (
     <div className="login-page">
       <div className="login-card">
-        
-        {/* TOGGLE BUTTONS */}
         <div className="toggle-wrapper">
-          <button
-            className={isDonor ? "toggle-btn active" : "toggle-btn"}
-            onClick={() => handleToggleUserType(true)}
-          >
-            Donor
-          </button>
-          <button
-            className={!isDonor ? "toggle-btn active" : "toggle-btn"}
-            onClick={() => handleToggleUserType(false)}
-          >
-            Seeker
-          </button>
+          <button className={isDonor ? "toggle-btn active" : "toggle-btn"} onClick={() => handleToggleUserType(true)}>Donor</button>
+          <button className={!isDonor ? "toggle-btn active" : "toggle-btn"} onClick={() => handleToggleUserType(false)}>Seeker</button>
         </div>
-
-        <h2 className="login-title">
-          {isLoginView
-            ? `${isDonor ? "Donor" : "Seeker"} Login`
-            : `${isDonor ? "Donor" : "Seeker"} Registration`}
-        </h2>
-
+        <h2 className="login-title">{isLoginView ? `${isDonor ? "Donor" : "Seeker"} Login` : `${isDonor ? "Donor" : "Seeker"} Registration`}</h2>
         <form onSubmit={handleAuthAction} className="login-form">
-          {/* REGISTRATION FIELDS */}
           {!isLoginView && (
             <>
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-
-              <select
-                value={bloodType}
-                onChange={(e) => setBloodType(e.target.value)}
-                required
-              >
+              <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <select value={bloodType} onChange={(e) => setBloodType(e.target.value)} required>
                 <option value="">Select Blood Type</option>
                 <option value="A+">A+</option><option value="A-">A-</option>
                 <option value="B+">B+</option><option value="B-">B-</option>
                 <option value="AB+">AB+</option><option value="AB-">AB-</option>
                 <option value="O+">O+</option><option value="O-">O-</option>
               </select>
-
               {isDonor ? (
-                <input
-                  type="text"
-                  placeholder="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  required
-                />
+                <input type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} required />
               ) : (
                 <>
-                  <input
-                    type="text"
-                    placeholder="Hospital Name"
-                    value={hospitalName}
-                    onChange={(e) => setHospitalName(e.target.value)}
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Contact Phone"
-                    value={contactPhone}
-                    onChange={(e) => setContactPhone(e.target.value)}
-                    required
-                  />
+                  <input type="text" placeholder="Hospital Name" value={hospitalName} onChange={(e) => setHospitalName(e.target.value)} required />
+                  <input type="text" placeholder="Contact Phone" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} required />
                 </>
               )}
             </>
           )}
-
-          {/* COMMON FIELDS */}
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          {/* ERROR MESSAGE */}
+          <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           {error && <p className="error">{error}</p>}
-
-          <button type="submit" className="submit-btn">
-            {isLoginView ? "Login" : "Register"}
-          </button>
+          <button type="submit" className="submit-btn">{isLoginView ? "Login" : "Register"}</button>
         </form>
-
-        <p className="switch-link" onClick={handleToggleView}>
-          {isLoginView
-            ? "Don't have an account? Sign Up"
-            : "Already have an account? Log In"}
-        </p>
+        <p className="switch-link" onClick={handleToggleView}>{isLoginView ? "Don't have an account? Sign Up" : "Already have an account? Log In"}</p>
       </div>
     </div>
   );

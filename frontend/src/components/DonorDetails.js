@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+// ONLY CHANGE: Added dynamic API URL for live deployment
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 export default function DonorDetails() {
   const [bloodType, setBloodType] = useState("");
   const [city, setCity] = useState("");
@@ -11,8 +14,9 @@ export default function DonorDetails() {
 
   const handleSave = async () => {
     try {
+      // UPDATED LINK: Using API_BASE_URL instead of localhost
       await axios.put(
-        "http://localhost:3001/api/donors/updateDetails",
+        `${API_BASE_URL}/api/donors/updateDetails`,
         { bloodType, city, isAvailable },
         { headers: { Authorization: `Bearer ${token}` } }
       );
