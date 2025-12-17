@@ -1,14 +1,8 @@
-// src/config/db.js
-
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+// backend/src/config/db.js
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
 dotenv.config();
-
-// Add this line to debug
-console.log('--- Checking Environment Variables ---');
-console.log('Database Dialect read from .env:', process.env.DB_DIALECT);
-console.log('------------------------------------');
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -16,8 +10,14 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-    logging: false,
+    dialect: 'mysql',
+    port: process.env.DB_PORT || 3306,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false // Often required for free cloud DBs
+      }
+    }
   }
 );
 
