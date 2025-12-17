@@ -1,0 +1,71 @@
+/* Seeker Form Wrapper */
+.seeker-form-wrapper {
+  background: #f7fff7;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 650px;
+  margin: 20px auto;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+.seeker-form-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0b3d6d;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Inputs */
+.seeker-input,
+.seeker-select {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #d0d0d0;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s ease-in-out;
+}
+
+.seeker-input:focus,
+.seeker-select:focus {
+  border-color: #ff4f4f;
+  box-shadow: 0 0 6px rgba(255, 79, 79, 0.4);
+}
+
+/* Submit Button */
+.seeker-submit-btn {
+  width: 100%;
+  background: #ff4f4f;
+  padding: 16px;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.seeker-submit-btn:hover {
+  background: #e63b3b;
+  transform: translateY(-2px);
+}
+
+/* Success / Error Messages */
+.success-message {
+  color: green;
+  font-size: 15px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+  font-size: 15px;
+  margin-top: 10px;
+  text-align: center;
+}
