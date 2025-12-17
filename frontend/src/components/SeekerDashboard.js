@@ -4,7 +4,7 @@ import axios from "axios";
 import "./SeekerForm.css";
 
 // ONLY CHANGE: Added dynamic API URL for live deployment
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+const API_BASE_URL = "https://blood-donor-jkjv.onrender.com";
 
 export default function SeekerDashboard() {
   const [view, setView] = useState("request");
