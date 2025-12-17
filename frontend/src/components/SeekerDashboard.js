@@ -20,24 +20,28 @@ export default function SeekerDashboard() {
     setStatusMessage("Submitting...");
 
     try {
-      // 1. Get the seekerId from localStorage (set during login)
+      // 1. Get the seekerId from localStorage (ensure this was set in Login.js)
       const storedId = localStorage.getItem("userId");
       
+      // SAFETY CHECK: If the ID is missing, stop and alert the user
       if (!storedId) {
-        setStatusMessage("❌ Error: You must be logged in to request blood.");
+        setStatusMessage("❌ Error: Seeker ID missing. Please log out and log in again.");
         return;
       }
 
-      // 2. Prepare the data exactly as the backend expects it
+      // 2. Prepare the data payload
       const payload = {
-        seekerId: parseInt(storedId), // Ensure it's an Integer
+        seekerId: parseInt(storedId), // Force conversion to Integer for the DB
         seekerName: name,
         bloodType: bloodType,
         hospitalName: hospital,
         contactPhone: phone,
-        message: message || "No additional message provided.",
-        donorId: null // Explicitly null for a general request
+        message: message || "Urgent blood request",
+        donorId: null // Explicitly null for general requests
       };
+
+      // Debugging: View exactly what is being sent in the browser console
+      console.log("Sending payload to backend:", payload);
 
       // 3. POST to the live API
       await axios.post(`${API_BASE_URL}/api/blood-request`, payload);
@@ -51,9 +55,9 @@ export default function SeekerDashboard() {
       setMessage("");
       
     } catch (err) {
-      // Log details to help you see exactly what the server didn't like
-      console.error("400 Error Details:", err.response?.data);
-      setStatusMessage(`❌ Failed: ${err.response?.data?.message || "Check console for missing fields"}`);
+      // Log details to the console to see the exact field the backend is rejecting
+      console.error("Submission Error:", err.response?.data);
+      setStatusMessage(`❌ Failed: ${err.response?.data?.message || "Check console for details"}`);
     }
   }
 
@@ -122,6 +126,7 @@ export default function SeekerDashboard() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="message-box"
+              style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ddd" }}
             />
           </div>
 
