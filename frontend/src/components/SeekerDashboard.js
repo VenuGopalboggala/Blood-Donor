@@ -1,15 +1,13 @@
 // frontend/src/components/SeekerDashboard.js
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "./SeekerForm.css";
 
-// The hardcoded live Render URL to ensure connection from Netlify
+// Hardcoded Render URL to ensure it connects from the Netlify link
 const API_BASE_URL = "https://blood-donor-jkjv.onrender.com";
 
 export default function SeekerDashboard() {
-  const [view, setView] = useState("request");
-
-  // form fields state
+  // Form fields state
   const [name, setName] = useState("");
   const [bloodType, setBloodType] = useState("");
   const [hospital, setHospital] = useState("");
@@ -19,25 +17,32 @@ export default function SeekerDashboard() {
 
   async function submitRequest(e) {
     e.preventDefault();
-    try {
-      // Get the ID from localStorage and convert to Number
-      const seekerId = localStorage.getItem("userId");
+    setStatusMessage("Submitting...");
 
-      // Construct the payload to match exactly what the backend/database expects
+    try {
+      // 1. Get the seekerId from localStorage (set during login)
+      const storedId = localStorage.getItem("userId");
+      
+      if (!storedId) {
+        setStatusMessage("❌ Error: You must be logged in to request blood.");
+        return;
+      }
+
+      // 2. Prepare the data exactly as the backend expects it
       const payload = {
-        seekerId: parseInt(seekerId), // Ensure this is an Integer
+        seekerId: parseInt(storedId), // Ensure it's an Integer
         seekerName: name,
         bloodType: bloodType,
         hospitalName: hospital,
         contactPhone: phone,
-        message: message || "Urgent blood request", // Default message if empty
-        donorId: null // Explicitly null for a general request to avoid 400 error
+        message: message || "No additional message provided.",
+        donorId: null // Explicitly null for a general request
       };
 
-      // POST request to the live Render API
+      // 3. POST to the live API
       await axios.post(`${API_BASE_URL}/api/blood-request`, payload);
 
-      // Success handling
+      // 4. Success handling
       setStatusMessage("✔ Request submitted successfully.");
       setName("");
       setBloodType("");
@@ -46,9 +51,9 @@ export default function SeekerDashboard() {
       setMessage("");
       
     } catch (err) {
-      // Log the specific error from the server to help debugging
-      console.error("Submission Error Response:", err.response?.data);
-      setStatusMessage(`❌ Failed: ${err.response?.data?.message || "Check network logs"}`);
+      // Log details to help you see exactly what the server didn't like
+      console.error("400 Error Details:", err.response?.data);
+      setStatusMessage(`❌ Failed: ${err.response?.data?.message || "Check console for missing fields"}`);
     }
   }
 
@@ -113,10 +118,10 @@ export default function SeekerDashboard() {
           <div className="input-group">
             <span className="icon">💬</span>
             <textarea 
-              placeholder="Additional Message (Optional)"
+              placeholder="Message (Optional)"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              className="message-box"
             />
           </div>
 
