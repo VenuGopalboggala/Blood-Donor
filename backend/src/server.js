@@ -13,24 +13,28 @@ import donorOfferRoutes from "./routes/donorOfferRoutes.js";
 dotenv.config();
 
 const app = express();
-// Render provides the PORT variable automatically
 const PORT = process.env.PORT || 3001;
 
-// 1. UPDATED: Ensure your live Netlify URL is exactly correct
+// 1. UPDATED: Added the specific build URL and a wildcard check
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://cheerful-malasada-7bbd5a.netlify.app" 
+  "https://cheerful-malasada-7bbd5a.netlify.app",
+  "https://6942b79a8b0b7e3777603dca--cheerful-malasada-7bbd5a.netlify.app" // The one from your error
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      // or if the origin is in our allowed list
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (like mobile apps)
+      if (!origin) return callback(null, true);
+
+      // Check if origin is in our list OR if it's any netlify.app subdomain
+      const isNetlify = origin.endsWith(".netlify.app");
+      
+      if (allowedOrigins.includes(origin) || isNetlify) {
         callback(null, true);
       } else {
-        console.log("Blocked by CORS:", origin); // Helps you debug if it fails
+        console.log("Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -51,11 +55,9 @@ app.use("/api/donor-offer", donorOfferRoutes);
 
 const startServer = async () => {
   try {
-    // 2. These credentials must be set in Render Environment Variables
     await sequelize.authenticate();
     console.log("✅ Connected to Cloud MySQL");
 
-    // use alter:true only if you want to update tables without losing data
     await sequelize.sync({ alter: true }); 
     console.log("📦 Models synchronized");
 
