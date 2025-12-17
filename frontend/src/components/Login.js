@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Login.css";
 
-// ONLY CHANGE: Created a dynamic base URL for the API
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+// FORCED CHANGE: We are putting your Render link directly here to bypass local errors
+const API_BASE_URL = "https://blood-donor-jkjv.onrender.com";
 
 function Login({ onLogin }) {
   const [isLoginView, setIsLoginView] = useState(true);
@@ -43,7 +43,7 @@ function Login({ onLogin }) {
 
     const userType = isDonor ? "donor" : "seeker";
 
-    // UPDATED LINK FOR LOGIN
+    // LOGIN
     if (isLoginView) {
       try {
         const response = await axios.post(
@@ -68,7 +68,7 @@ function Login({ onLogin }) {
       };
     }
 
-    // UPDATED LINK FOR REGISTRATION
+    // REGISTRATION ACTION
     try {
       await axios.post(
         `${API_BASE_URL}/api/auth/register/${userType}`,
