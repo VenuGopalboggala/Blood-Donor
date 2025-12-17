@@ -25,13 +25,14 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps)
+      // 1. Allow requests with no origin (like mobile apps)
       if (!origin) return callback(null, true);
 
-      // Check if origin is in our list OR if it's any netlify.app subdomain
+      // 2. Allow any URL that ends with .netlify.app or is localhost
       const isNetlify = origin.endsWith(".netlify.app");
-      
-      if (allowedOrigins.includes(origin) || isNetlify) {
+      const isLocal = origin.includes("localhost");
+
+      if (isNetlify || isLocal) {
         callback(null, true);
       } else {
         console.log("Blocked by CORS:", origin);
