@@ -22,14 +22,15 @@ export default function SeekerDashboard() {
       const seekerId = localStorage.getItem("userId");
 
       // UPDATED LINK: Using API_BASE_URL instead of localhost
-      await axios.post(`${API_BASE_URL}/api/blood-request`, {
-        seekerId,
-        seekerName: name,
-        bloodType,
-        hospitalName: hospital,
-        contactPhone: phone,
-        message,
-      });
+      // Inside submitRequest
+await axios.post("https://blood-donor-jkjv.onrender.com/api/blood-request", {
+  seekerId,
+  seekerName: name,
+  bloodType,
+  hospitalName: hospital,
+  contactPhone: phone,
+  message,
+});
 
       setMessage("✔ Request submitted successfully.");
       setName("");

@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Login.css";
 
-// FORCED CHANGE: We are putting your Render link directly here to bypass local errors
 const API_BASE_URL = "https://blood-donor-jkjv.onrender.com";
 
 function Login({ onLogin }) {
   const [isLoginView, setIsLoginView] = useState(true);
   const [isDonor, setIsDonor] = useState(true);
 
-  // Form fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -27,30 +25,17 @@ function Login({ onLogin }) {
     setLat(""); setLng(""); setError("");
   };
 
-  const handleToggleView = () => {
-    setIsLoginView(!isLoginView);
-    resetForm();
-  };
-
-  const handleToggleUserType = (isDonorLogin) => {
-    setIsDonor(isDonorLogin);
-    resetForm();
-  };
+  const handleToggleView = () => { setIsLoginView(!isLoginView); resetForm(); };
+  const handleToggleUserType = (isDonorLogin) => { setIsDonor(isDonorLogin); resetForm(); };
 
   const handleAuthAction = async (e) => {
     e.preventDefault();
     setError("");
-
     const userType = isDonor ? "donor" : "seeker";
 
-    // LOGIN
     if (isLoginView) {
       try {
-        const response = await axios.post(
-          `${API_BASE_URL}/api/auth/login/${userType}`,
-          { email, password }
-        );
-
+        const response = await axios.post(`${API_BASE_URL}/api/auth/login/${userType}`, { email, password });
         onLogin(response.data.token, userType);
       } catch (err) {
         setError("Invalid email or password. Please try again.");
@@ -58,23 +43,10 @@ function Login({ onLogin }) {
       return;
     }
 
-    // REGISTRATION
-    let registrationData;
-    if (isDonor) {
-      registrationData = { name, email, password, bloodType, city };
-    } else {
-      registrationData = {
-        name, email, password, bloodType, hospitalName, contactPhone, lat, lng,
-      };
-    }
+    let regData = isDonor ? { name, email, password, bloodType, city } : { name, email, password, bloodType, hospitalName, contactPhone, lat, lng };
 
-    // REGISTRATION ACTION
     try {
-      await axios.post(
-        `${API_BASE_URL}/api/auth/register/${userType}`,
-        registrationData
-      );
-
+      await axios.post(`${API_BASE_URL}/api/auth/register/${userType}`, regData);
       alert(`${userType} registered successfully! Please login.`);
       setIsLoginView(true);
       resetForm();
@@ -122,5 +94,4 @@ function Login({ onLogin }) {
     </div>
   );
 }
-
 export default Login;

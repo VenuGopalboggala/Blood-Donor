@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./donorDashboard.css";
 
-// ONLY CHANGE: Added dynamic API URL for live deployment
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+// FORCED CHANGE: Using your direct Render URL to fix the "localhost" error on Netlify
+const API_BASE_URL = "https://blood-donor-jkjv.onrender.com";
 
 export default function DonorDashboard() {
   const donorId = localStorage.getItem("userId");
@@ -17,7 +17,7 @@ export default function DonorDashboard() {
 
   async function loadRequests() {
     try {
-      // UPDATED LINK: Using API_BASE_URL instead of localhost
+      // Calls your live Render backend directly
       const res = await axios.get(
         `${API_BASE_URL}/api/blood-request/donor/${donorId}`
       );
@@ -39,22 +39,27 @@ export default function DonorDashboard() {
   }
 
   async function accept(id) {
-    // UPDATED LINK: Using API_BASE_URL instead of localhost
-    await axios.put(`${API_BASE_URL}/api/blood-request/accept/${id}`);
-    loadRequests();
+    try {
+      await axios.put(`${API_BASE_URL}/api/blood-request/accept/${id}`);
+      loadRequests();
+    } catch (err) {
+      console.error("Accept error:", err);
+    }
   }
 
   async function reject(id) {
-    // UPDATED LINK: Using API_BASE_URL instead of localhost
-    await axios.put(`${API_BASE_URL}/api/blood-request/reject/${id}`);
-    loadRequests();
+    try {
+      await axios.put(`${API_BASE_URL}/api/blood-request/reject/${id}`);
+      loadRequests();
+    } catch (err) {
+      console.error("Reject error:", err);
+    }
   }
 
   return (
     <div className="donor-dashboard-container">
       <h2 className="title">Blood Requests</h2>
 
-      {/* Search Filter */}
       <div className="filter-box">
         <select
           value={searchBlood}
@@ -72,7 +77,6 @@ export default function DonorDashboard() {
         </select>
       </div>
 
-      {/* Request Cards */}
       <div className="requests-grid">
         {filteredRequests.length === 0 ? (
           <p>No requests available.</p>
