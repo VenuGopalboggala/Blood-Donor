@@ -36,6 +36,18 @@ function Login({ onLogin }) {
     if (isLoginView) {
       try {
         const response = await axios.post(`${API_BASE_URL}/api/auth/login/${userType}`, { email, password });
+        
+        // --- NEW: SAVE USER ID TO LOCAL STORAGE ---
+        // Your backend returns the user object or id inside response.data
+        const userId = response.data.user ? response.data.user.id : response.data.id;
+        
+        if (userId) {
+          localStorage.setItem("userId", userId);
+          localStorage.setItem("userType", userType);
+          console.log("Saved User ID:", userId);
+        }
+        // ------------------------------------------
+
         onLogin(response.data.token, userType);
       } catch (err) {
         setError("Invalid email or password. Please try again.");
@@ -94,4 +106,5 @@ function Login({ onLogin }) {
     </div>
   );
 }
+
 export default Login;
