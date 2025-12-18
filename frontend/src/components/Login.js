@@ -37,30 +37,26 @@ function Login({ onLogin }) {
       try {
         const response = await axios.post(`${API_BASE_URL}/api/auth/login/${userType}`, { email, password });
         
-        // 1. Log the response to see exactly what the server sent
-        console.log("Login Response Data:", response.data);
-
-        // 2. Extract the ID (handles different backend structures)
-        const userId = response.data.user ? response.data.user.id : response.data.id;
+        // Match the backend field name 'userId' from your authRoutes.js
+        const idToStore = response.data.userId;
         
-        if (userId) {
-          // 3. Clear old data and save new credentials
-          localStorage.clear(); 
-          localStorage.setItem("userId", String(userId));
+        if (idToStore) {
+          localStorage.clear(); // Clear old session data
+          localStorage.setItem("userId", String(idToStore));
           localStorage.setItem("userType", userType);
           localStorage.setItem("token", response.data.token);
           
-          console.log("✅ Successfully saved userId:", userId);
+          console.log("✅ ID successfully stored:", idToStore);
           
-          // 4. Update the app state and navigate
-          onLogin(response.data.token, userType);
+          // Small delay to ensure storage is written before navigation
+          setTimeout(() => {
+            onLogin(response.data.token, userType);
+          }, 100);
         } else {
-          setError("Login successful, but server did not return a User ID.");
-          console.error("Missing ID in response:", response.data);
+          setError("Login successful, but server did not return a userId.");
         }
       } catch (err) {
-        setError("Invalid email or password.");
-        console.error("Login Error:", err);
+        setError("Invalid email or password. Please try again.");
       }
       return;
     }
@@ -116,5 +112,4 @@ function Login({ onLogin }) {
     </div>
   );
 }
-
 export default Login;

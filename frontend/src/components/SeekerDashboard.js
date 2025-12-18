@@ -16,27 +16,25 @@ export default function SeekerDashboard() {
     e.preventDefault();
     setStatusMessage("Submitting...");
 
-    // 1. Force read from storage
+    // Try to get the ID saved by Login.js
     const storedId = localStorage.getItem("userId");
     console.log("Dashboard checking userId:", storedId);
 
-    if (!storedId || storedId === "undefined" || storedId === "null") {
+    if (!storedId || storedId === "null" || storedId === "undefined") {
       setStatusMessage("❌ Error: Seeker ID missing. Please log out and back in.");
       return;
     }
 
     try {
       const payload = {
-        seekerId: parseInt(storedId), // Ensure Integer
+        seekerId: parseInt(storedId), 
         seekerName: name,
         bloodType: bloodType,
         hospitalName: hospital,
         contactPhone: phone,
-        message: message || "Urgent request",
+        message: message || "Urgent blood request",
         donorId: null 
       };
-
-      console.log("Payload being sent:", payload);
 
       await axios.post(`${API_BASE_URL}/api/blood-request`, payload);
 
@@ -44,8 +42,8 @@ export default function SeekerDashboard() {
       setName(""); setBloodType(""); setHospital(""); setPhone(""); setMessage("");
       
     } catch (err) {
-      console.error("400 Error details:", err.response?.data);
-      setStatusMessage(`❌ Failed: ${err.response?.data?.message || "Check console"}`);
+      console.error("Submission Error:", err.response?.data);
+      setStatusMessage(`❌ Failed: ${err.response?.data?.message || "Check network"}`);
     }
   }
 
@@ -54,17 +52,29 @@ export default function SeekerDashboard() {
       <div className="seeker-card">
         <h2 className="title">Request Blood</h2>
         <form className="form-container" onSubmit={submitRequest}>
-          <input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} required />
-          <select value={bloodType} onChange={(e) => setBloodType(e.target.value)} required>
-            <option value="">Select Blood Type</option>
-            <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
-            <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
-          </select>
-          <input type="text" placeholder="Hospital Name" value={hospital} onChange={(e) => setHospital(e.target.value)} required />
-          <input type="text" placeholder="Contact Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-          <textarea placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} />
+          <div className="input-group">
+            <input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+          <div className="input-group">
+            <select value={bloodType} onChange={(e) => setBloodType(e.target.value)} required>
+              <option value="">Select Blood Type</option>
+              <option>A+</option><option>A-</option>
+              <option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option>
+              <option>O+</option><option>O-</option>
+            </select>
+          </div>
+          <div className="input-group">
+            <input type="text" placeholder="Hospital Name" value={hospital} onChange={(e) => setHospital(e.target.value)} required />
+          </div>
+          <div className="input-group">
+            <input type="text" placeholder="Contact Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+          </div>
+          <div className="input-group">
+            <textarea placeholder="Message (Optional)" value={message} onChange={(e) => setMessage(e.target.value)} />
+          </div>
           <button className="submit-btn" type="submit">Submit Request</button>
-          {statusMessage && <p className="msg">{statusMessage}</p>}
+          {statusMessage && <p className={statusMessage.includes("✔") ? "msg success" : "msg error"}>{statusMessage}</p>}
         </form>
       </div>
     </div>

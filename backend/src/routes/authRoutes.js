@@ -49,11 +49,12 @@ router.post("/login/donor", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    return res.json({
-      token,
-      userId: donor.id,
-      userType: "donor"
-    });
+   return res.json({
+  token,
+  id: donor.id,      // Added this for compatibility
+  userId: donor.id,  
+  userType: "donor"
+});
 
   } catch (error) {
     console.error("Donor login error:", error);
@@ -115,12 +116,12 @@ router.post("/login/seeker", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    return res.json({
-      token,
-      userId: seeker.id,
-      userType: "seeker"
-    });
-
+   return res.json({
+  token,
+  id: seeker.id,     // Added this for compatibility
+  userId: seeker.id, 
+  userType: "seeker"
+});
   } catch (error) {
     console.error("Seeker login error:", error);
     return res.status(500).json({ message: "Error logging in seeker" });
