@@ -37,26 +37,30 @@ function Login({ onLogin }) {
       try {
         const response = await axios.post(`${API_BASE_URL}/api/auth/login/${userType}`, { email, password });
         
-        // DEBUG: See what the server sent
-        console.log("Login Response:", response.data);
+        // 1. Log the response to see exactly what the server sent
+        console.log("Login Response Data:", response.data);
 
-        // Extract ID - handles both 'res.data.id' or 'res.data.user.id'
+        // 2. Extract the ID (handles different backend structures)
         const userId = response.data.user ? response.data.user.id : response.data.id;
         
         if (userId) {
+          // 3. Clear old data and save new credentials
+          localStorage.clear(); 
           localStorage.setItem("userId", String(userId));
           localStorage.setItem("userType", userType);
-          console.log("Successfully saved userId to storage:", userId);
+          localStorage.setItem("token", response.data.token);
           
-          // Small delay to ensure storage is written
-          setTimeout(() => {
-            onLogin(response.data.token, userType);
-          }, 100);
+          console.log("✅ Successfully saved userId:", userId);
+          
+          // 4. Update the app state and navigate
+          onLogin(response.data.token, userType);
         } else {
           setError("Login successful, but server did not return a User ID.");
+          console.error("Missing ID in response:", response.data);
         }
       } catch (err) {
         setError("Invalid email or password.");
+        console.error("Login Error:", err);
       }
       return;
     }
