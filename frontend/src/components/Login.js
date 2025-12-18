@@ -37,20 +37,26 @@ function Login({ onLogin }) {
       try {
         const response = await axios.post(`${API_BASE_URL}/api/auth/login/${userType}`, { email, password });
         
-        // --- NEW: SAVE USER ID TO LOCAL STORAGE ---
-        // Your backend returns the user object or id inside response.data
+        // DEBUG: See what the server sent
+        console.log("Login Response:", response.data);
+
+        // Extract ID - handles both 'res.data.id' or 'res.data.user.id'
         const userId = response.data.user ? response.data.user.id : response.data.id;
         
         if (userId) {
-          localStorage.setItem("userId", userId);
+          localStorage.setItem("userId", String(userId));
           localStorage.setItem("userType", userType);
-          console.log("Saved User ID:", userId);
+          console.log("Successfully saved userId to storage:", userId);
+          
+          // Small delay to ensure storage is written
+          setTimeout(() => {
+            onLogin(response.data.token, userType);
+          }, 100);
+        } else {
+          setError("Login successful, but server did not return a User ID.");
         }
-        // ------------------------------------------
-
-        onLogin(response.data.token, userType);
       } catch (err) {
-        setError("Invalid email or password. Please try again.");
+        setError("Invalid email or password.");
       }
       return;
     }
