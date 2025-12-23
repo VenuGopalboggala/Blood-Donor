@@ -107,3 +107,56 @@
 .availability-tag { font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; }
 .availability-tag.online { background: #e1f5fe; color: #0288d1; }
 .availability-tag.offline { background: #ffebee; color: #c62828; }
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+
+@media (max-width: 768px) {
+  .seeker-dashboard-wrapper {
+    flex-direction: column; /* Stack sidebar on top of content */
+  }
+
+  .sidebar {
+    width: 100%; /* Full width on mobile */
+    padding: 15px;
+    flex-direction: row; /* Horizontal menu */
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .brand-logo {
+    display: none; /* Hide logo to save space on mobile */
+  }
+
+  .side-link {
+    margin-bottom: 0;
+    padding: 10px;
+    font-size: 0.9rem;
+    flex: 1;
+    text-align: center;
+  }
+
+  .main-content {
+    padding: 20px 10px; /* Reduce padding on mobile */
+  }
+
+  .glass-card {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .donor-grid {
+    grid-template-columns: 1fr; /* Single column for donors on small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .side-link {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+}
