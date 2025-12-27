@@ -5,123 +5,151 @@ import "./SeekerForm.css";
 const API_BASE_URL = "https://blood-donor-jkjv.onrender.com";
 
 export default function SeekerDashboard() {
-  const [view, setView] = useState("request"); // Toggle between 'request' and 'donors'
-  const [donors, setDonors] = useState([]);
-  
-  // Existing Form states
+  // 1. Set default view to "overview" instead of "request"
+  const [view, setView] = useState("overview"); 
+  const [donorOffers, setDonorOffers] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Form states
   const [name, setName] = useState("");
   const [bloodType, setBloodType] = useState("");
   const [hospital, setHospital] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
-  const [statusMessage, setStatusMessage] = useState("");
 
-  // Fetch donors only when the user clicks the "Available Donors" tab
   useEffect(() => {
-    if (view === "donors") {
-      fetchDonors();
-    }
+    if (view === "offers") fetchOffers();
   }, [view]);
 
-  const fetchDonors = async () => {
+  const fetchOffers = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/donors`);
-      setDonors(res.data);
+      const res = await axios.get(`${API_BASE_URL}/api/donor-offer`);
+      setDonorOffers(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.error("Error fetching donors:", err);
+      console.error("Error fetching donor offers:", err);
     }
   };
 
-  // YOUR EXISTING CONNECTION LOGIC - UNCHANGED
   async function submitRequest(e) {
     e.preventDefault();
-    setStatusMessage("Submitting...");
-
     const storedId = localStorage.getItem("userId");
-    console.log("Dashboard checking userId:", storedId);
-
-    if (!storedId || storedId === "null" || storedId === "undefined") {
-      setStatusMessage("❌ Error: Seeker ID missing. Please log out and back in.");
-      return;
-    }
+    const payload = {
+      seekerId: parseInt(storedId),
+      seekerName: name,
+      bloodType,
+      hospitalName: hospital,
+      contactPhone: phone,
+      message: message || "Urgent blood requirement",
+      donorId: null 
+    };
 
     try {
-      const payload = {
-        seekerId: parseInt(storedId), 
-        seekerName: name,
-        bloodType: bloodType,
-        hospitalName: hospital,
-        contactPhone: phone,
-        message: message || "Urgent blood request",
-        donorId: null 
-      };
-
       await axios.post(`${API_BASE_URL}/api/blood-request`, payload);
-
-      setStatusMessage("✔ Request submitted successfully.");
+      setIsSubmitted(true);
+      // Clear form
       setName(""); setBloodType(""); setHospital(""); setPhone(""); setMessage("");
-      
     } catch (err) {
-      console.error("Submission Error:", err.response?.data);
-      setStatusMessage(`❌ Failed: ${err.response?.data?.message || "Check network"}`);
+      alert("Submission failed. Check your connection.");
     }
+  }
+
+  // Success View Logic remains the same
+  if (isSubmitted) {
+    return (
+      <div className="success-screen">
+        <div className="success-card">
+          <div className="success-check-icon">✔</div>
+          <h1 className="big-success-text">Submitted Successfully!</h1>
+          <p>Your request is now live. Donors in your area can view your requirements and contact you.</p>
+          <div className="success-actions">
+            <button className="gradient-btn" onClick={() => setIsSubmitted(false)}>
+              Post Another Request
+            </button>
+            <button className="outline-btn" onClick={() => { setIsSubmitted(false); setView("offers"); }}>
+              View Available Donors
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="seeker-dashboard-wrapper">
+      {/* Sidebar Navigation */}
       <div className="sidebar">
-        <h2 className="brand-logo">Blood Network</h2>
-        <button className={view === "request" ? "side-link active" : "side-link"} onClick={() => setView("request")}>
+        <h3 className="sidebar-logo">Blood Network</h3>
+        {/* Added Overview Button */}
+        <button 
+          className={view === "overview" ? "side-link active" : "side-link"} 
+          onClick={() => setView("overview")}
+        >
+          🏠 Dashboard Home
+        </button>
+        <button 
+          className={view === "request" ? "side-link active" : "side-link"} 
+          onClick={() => setView("request")}
+        >
           💉 Request Blood
         </button>
-        <button className={view === "donors" ? "side-link active" : "side-link"} onClick={() => setView("donors")}>
-          👥 Available Donors
+        <button 
+          className={view === "offers" ? "side-link active" : "side-link"} 
+          onClick={() => setView("offers")}
+        >
+          🤝 Donor Offers
         </button>
       </div>
 
       <div className="main-content">
-        {view === "request" ? (
+        {/* 2. New Default Overview View */}
+        {view === "overview" && (
+          <div className="overview-container">
+            <h2 className="section-title">Welcome to Seeker Dashboard</h2>
+            <div className="welcome-card">
+              <p>Quickly find donors or post a new request to get help immediately.</p>
+              <div className="action-cards">
+                <div className="mini-card" onClick={() => setView("request")}>
+                  <h3>Need Blood?</h3>
+                  <p>Click here to fill the request form.</p>
+                </div>
+                <div className="mini-card" onClick={() => setView("offers")}>
+                  <h3>Check Donors</h3>
+                  <p>View donors who are currently available.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {view === "request" && (
           <div className="glass-card">
-            <h2 className="section-title">Blood Request Form</h2>
-            <form className="modern-form" onSubmit={submitRequest}>
-              <div className="input-box">
-                <input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} required />
-              </div>
-              <div className="input-box">
-                <select value={bloodType} onChange={(e) => setBloodType(e.target.value)} required>
-                  <option value="">Select Blood Type</option>
-                  {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(t => <option key={t} value={t}>{t}</option>)}
-                </select>
-              </div>
-              <div className="input-box">
-                <input type="text" placeholder="Hospital Name" value={hospital} onChange={(e) => setHospital(e.target.value)} required />
-              </div>
-              <div className="input-box">
-                <input type="text" placeholder="Contact Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-              </div>
-              <div className="input-box">
-                <textarea placeholder="Message (Optional)" value={message} onChange={(e) => setMessage(e.target.value)} />
-              </div>
-              <button className="gradient-btn" type="submit">Submit Request</button>
-              {statusMessage && <p className={`status-text ${statusMessage.includes("✔") ? "success" : "error"}`}>{statusMessage}</p>}
+            <h2 className="section-title">New Blood Request</h2>
+            <form onSubmit={submitRequest} className="modern-form">
+              {/* ... Your Form Inputs ... */}
+              <input type="text" placeholder="Patient Name" value={name} onChange={(e) => setName(e.target.value)} required />
+              <select value={bloodType} onChange={(e) => setBloodType(e.target.value)} required>
+                <option value="">Select Blood Type</option>
+                {["A+", "O+", "B+", "AB+", "A-", "O-", "B-", "AB-"].map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+              <input type="text" placeholder="Hospital & City" value={hospital} onChange={(e) => setHospital(e.target.value)} required />
+              <input type="text" placeholder="Contact Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+              <textarea placeholder="Additional Message" value={message} onChange={(e) => setMessage(e.target.value)} />
+              <button className="gradient-btn" type="submit">Post Request</button>
             </form>
           </div>
-        ) : (
+        )}
+
+        {view === "offers" && (
           <div className="donor-section">
-            <h2 className="section-title">Donors in Your Area</h2>
+            <h2 className="section-title">Available Donor Offers</h2>
             <div className="donor-grid">
-              {donors.length > 0 ? donors.map(donor => (
-                <div className="donor-card-styled" key={donor.id}>
-                  <div className="blood-icon">{donor.bloodType}</div>
-                  <div className="donor-details">
-                    <h3>{donor.name}</h3>
-                    <p>📍 {donor.city}</p>
-                    <span className={`availability-tag ${donor.isAvailable ? "online" : "offline"}`}>
-                      {donor.isAvailable ? "Available" : "Busy"}
-                    </span>
-                  </div>
+              {donorOffers.map(offer => (
+                <div className="donor-card-styled" key={offer.id}>
+                  <h3>📍 {offer.location}</h3>
+                  <p>📅 {offer.availabilityDate}</p>
+                  <a href={`tel:${offer.contactPhone}`} className="call-btn">📞 Call Donor</a>
                 </div>
-              )) : <p>Loading active donors...</p>}
+              ))}
             </div>
           </div>
         )}
