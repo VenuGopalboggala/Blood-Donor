@@ -356,3 +356,80 @@
 .close-hero-btn:hover {
   background: #e63946;
 }
+/* --- Mobile View Enhancements --- */
+@media (max-width: 768px) {
+  /* Stack the Sidebar and Main Content vertically */
+  .donor-app-container {
+    flex-direction: column;
+  }
+
+  /* Change Sidebar to a horizontal top bar */
+  .sidebar {
+    width: 100%;
+    padding: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .sidebar-header {
+    display: none; /* Hide avatar on mobile top-bar to save space */
+  }
+
+  .side-btn {
+    margin-bottom: 0;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Stack the Form and Requests panels */
+  .dashboard-grid-main {
+    flex-direction: column;
+    padding: 15px !important;
+    gap: 20px !important;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+
+  /* Make Form and Requests full width */
+  .form-panel, .requests-panel {
+    width: 100%;
+  }
+
+  /* Adjust Profile Hero Card for small screens */
+  .profile-hero-card {
+    padding: 20px;
+  }
+
+  .profile-top {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .impact-stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Adjust the "Lives Saved" text size */
+  .stat-val {
+    font-size: 1.8rem;
+  }
+
+  /* Ensure the Thank You Modal fits on screen */
+  .thank-you-card {
+    width: 95%;
+    padding: 25px;
+  }
+
+  .thanks-title {
+    font-size: 1.5rem;
+  }
+}
