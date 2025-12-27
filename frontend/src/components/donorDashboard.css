@@ -1,141 +1,38 @@
-.donor-dashboard-container {
-  padding: 20px;
-  width: 100%;
-  background: #f5fff5;
-  min-height: 100vh;
+/* =========================================
+   1. GLOBAL & CONTAINER STYLES
+   ========================================= */
+:root {
+  --primary-red: #e63946;
+  --dark-grey: #2d3436;
+  --light-bg: #f8f9fa;
+  --success-green: #2ecc71;
+  --white: #ffffff;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.title {
-  font-size: 28px;
-  margin-bottom: 15px;
-  color: #023047;
-}
-
-.filter-box {
-  margin-bottom: 20px;
-}
-
-.filter-box select {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-}
-
-.requests-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-.request-card {
-  background: white;
-  padding: 18px;
-  border-radius: 12px;
-  border-left: 5px solid #ff4d4d;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-}
-
-.request-card h3 {
-  margin: 0 0 8px 0;
-  color: #222;
-}
-
-.request-card p {
-  margin: 5px 0;
-  font-size: 14px;
-}
-
-.button-row {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.accept-btn {
-  flex: 1;
-  background: #38b000;
-  color: white;
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.reject-btn {
-  flex: 1;
-  background: #d00000;
-  color: white;
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.accept-btn:hover { background: #2d8a00; }
-.reject-btn:hover { background: #a00000; }
-
-.dashboard-grid-main {
-  display: flex;
-  gap: 30px;
-  padding: 20px;
-}
-
-.form-panel, .requests-panel {
-  flex: 1;
-}
-
-.request-card-modern {
-  background: white;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  border-left: 5px solid #ff4d4d;
-}
-
-.button-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.accept-btn {
-  flex: 1;
-  background: #38b000;
-  color: white;
-  border: none;
-  padding: 8px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.reject-btn {
-  flex: 1;
-  background: #d00000;
-  color: white;
-  border: none;
-  padding: 8px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Container Layout */
 .donor-app-container {
   display: flex;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--light-bg);
+  font-family: 'Inter', sans-serif;
 }
 
-/* Sidebar Styling */
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* =========================================
+   2. SIDEBAR NAVIGATION
+   ========================================= */
 .sidebar {
   width: 250px;
-  background: #2d3436;
-  color: white;
+  background: var(--dark-grey);
+  color: var(--white);
   display: flex;
   flex-direction: column;
   padding: 20px;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-header {
@@ -146,7 +43,7 @@
 .avatar-circle {
   width: 60px;
   height: 60px;
-  background: #e63946;
+  background: var(--primary-red);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -166,28 +63,91 @@
   cursor: pointer;
   border-radius: 8px;
   margin-bottom: 10px;
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
-.side-btn.active, .side-btn:hover {
-  background: #e63946;
-  color: white;
+.side-btn.active, 
+.side-btn:hover {
+  background: var(--primary-red);
+  color: var(--white);
 }
 
-/* Main Content Area */
-.main-content {
+/* =========================================
+   3. DASHBOARD LAYOUT (FORMS & REQUESTS)
+   ========================================= */
+.dashboard-grid-main {
+  display: flex;
+  gap: 30px;
+}
+
+.form-panel, 
+.requests-panel {
   flex: 1;
-  padding: 20px;
 }
 
-/* Profile Specific CSS */
+/* Shared Card Styling */
+.glass-card, 
+.request-card-modern {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.request-card-modern {
+  margin-bottom: 15px;
+  border-left: 5px solid var(--primary-red);
+}
+
+/* Inputs & Buttons */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.post-btn, 
+.accept-btn, 
+.reject-btn {
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.post-btn {
+  width: 100%;
+  background: var(--primary-red);
+  color: var(--white);
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.accept-btn { flex: 1; background: #38b000; color: white; }
+.reject-btn { flex: 1; background: #d00000; color: white; }
+
+.accept-btn:hover { background: #2d8a00; }
+.reject-btn:hover { background: #a00000; }
+
+/* =========================================
+   4. PROFILE VIEW
+   ========================================= */
 .profile-view-container {
   max-width: 800px;
   margin: 0 auto;
 }
 
 .profile-hero-card {
-  background: white;
+  background: var(--white);
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -204,21 +164,13 @@
   width: 90px;
   height: 90px;
   background: #f1f2f6;
-  color: #e63946;
+  color: var(--primary-red);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 800;
-}
-
-.hero-blood-badge {
-  background: #fff5f5;
-  color: #e63946;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-weight: bold;
 }
 
 .impact-stats {
@@ -229,7 +181,7 @@
 
 .stat-card {
   flex: 1;
-  background: #f8f9fa;
+  background: var(--light-bg);
   padding: 25px;
   border-radius: 15px;
   text-align: center;
@@ -240,42 +192,22 @@
   display: block;
   font-size: 2.5rem;
   font-weight: 800;
-  color: #2ecc71;
+  color: var(--success-green);
 }
 
 .stat-lab {
   color: #636e72;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   letter-spacing: 1px;
 }
 
-/* Reused Form/Request Styling */
-.form-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.post-btn {
-  width: 100%;
-  background: #e63946;
-  color: white;
-  border: none;
-  padding: 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-/* Full Screen Blur Overlay */
+/* =========================================
+   5. THANK YOU OVERLAY (MODAL)
+   ========================================= */
 .thank-you-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(45, 52, 54, 0.8);
   backdrop-filter: blur(8px);
   display: flex;
@@ -285,9 +217,8 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* The Thank You Card */
 .thank-you-card {
-  background: white;
+  background: var(--white);
   padding: 40px;
   border-radius: 30px;
   text-align: center;
@@ -297,28 +228,9 @@
 }
 
 .heart-animation {
-  font-size: 5rem;
-  margin-bottom: 20px;
+  font-size: 4rem;
+  margin-bottom: 15px;
   animation: heartbeat 1.2s infinite;
-}
-
-@keyframes heartbeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.1); }
-  50% { transform: scale(1); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-@keyframes popHero {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.thank-you-card h2 {
-  color: #e63946;
-  font-size: 2rem;
-  margin-bottom: 10px;
 }
 
 .progress-bar-container {
@@ -332,104 +244,58 @@
 
 .progress-fill {
   height: 100%;
-  background: #27ae60;
+  background: var(--success-green);
   width: 0%;
   animation: fillProgress 3.5s linear forwards;
 }
 
+/* =========================================
+   6. ANIMATIONS
+   ========================================= */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes popHero {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 @keyframes fillProgress {
-  0% { width: 0%; }
-  100% { width: 100%; }
+  to { width: 100%; }
 }
 
-.close-hero-btn {
-  background: #2d3436;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.close-hero-btn:hover {
-  background: #e63946;
-}
-/* --- Mobile View Enhancements --- */
+/* =========================================
+   7. MOBILE VIEW (RESPONSIVE)
+   ========================================= */
 @media (max-width: 768px) {
-  /* Stack the Sidebar and Main Content vertically */
-  .donor-app-container {
-    flex-direction: column;
-  }
+  .donor-app-container { flex-direction: column; }
 
-  /* Change Sidebar to a horizontal top bar */
   .sidebar {
     width: 100%;
-    padding: 10px;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
+    padding: 10px;
     position: sticky;
     top: 0;
     z-index: 1000;
   }
 
-  .sidebar-header {
-    display: none; /* Hide avatar on mobile top-bar to save space */
-  }
+  .sidebar-header { display: none; }
 
   .side-btn {
     margin-bottom: 0;
-    padding: 10px 15px;
-    font-size: 0.9rem;
     flex: 1;
     text-align: center;
-  }
-
-  /* Stack the Form and Requests panels */
-  .dashboard-grid-main {
-    flex-direction: column;
-    padding: 15px !important;
-    gap: 20px !important;
-  }
-
-  .main-content {
     padding: 10px;
   }
 
-  /* Make Form and Requests full width */
-  .form-panel, .requests-panel {
-    width: 100%;
-  }
-
-  /* Adjust Profile Hero Card for small screens */
-  .profile-hero-card {
-    padding: 20px;
-  }
-
-  .profile-top {
+  .dashboard-grid-main {
     flex-direction: column;
-    text-align: center;
+    padding: 15px;
   }
 
-  .impact-stats {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  /* Adjust the "Lives Saved" text size */
-  .stat-val {
-    font-size: 1.8rem;
-  }
-
-  /* Ensure the Thank You Modal fits on screen */
-  .thank-you-card {
-    width: 95%;
-    padding: 25px;
-  }
-
-  .thanks-title {
-    font-size: 1.5rem;
-  }
+  .profile-top { flex-direction: column; text-align: center; }
+  .impact-stats { flex-direction: column; }
+  .stat-val { font-size: 1.8rem; }
 }
