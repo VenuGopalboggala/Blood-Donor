@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-// Add this line at the top of src/App.js
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-// ... rest of your imports
-
 
 import Login from './components/Login';
 import DonorDashboard from './components/DonorDashboard';
 import SeekerDashboard from './components/SeekerDashboard';
 import DashboardLayout from './components/DashboardLayout';
+// --- IMPORT NEW COMPONENT ---
+import ForgotPassword from './components/ForgotPassword'; 
 
 import './App.css';
 
@@ -30,11 +29,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* LOGIN PAGE */}
         <Route 
           path="/login"
           element={!token ? <Login onLogin={handleLogin} /> : <Navigate to="/" />}
+        />
+
+        {/* --- FORGOT PASSWORD ROUTE --- */}
+        <Route 
+          path="/forgot-password" 
+          element={<ForgotPassword />} 
         />
 
         {/* PROTECTED DASHBOARD ROUTES */}
@@ -42,7 +46,6 @@ function App() {
           path="/"
           element={token ? <DashboardLayout onLogout={handleLogout} /> : <Navigate to="/login" />}
         >
-          
           {/* Redirect home based on userType */}
           <Route 
             index
@@ -62,12 +65,10 @@ function App() {
 
           {/* Seeker Dashboard */}
           <Route path="dashboard/seeker" element={<SeekerDashboard />} />
-
         </Route>
 
         {/* CATCH ALL */}
         <Route path="*" element={<Navigate to="/" />} />
-
       </Routes>
     </BrowserRouter>
   );

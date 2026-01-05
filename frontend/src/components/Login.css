@@ -95,3 +95,19 @@
   color: #007bff;
   font-weight: 500;
 }
+
+.forgot-password-link {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #e63946;
+  cursor: pointer;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.forgot-password-link:hover {
+  color: #c0392b;
+  text-decoration: underline;
+}

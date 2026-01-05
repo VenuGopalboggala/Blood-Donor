@@ -192,15 +192,15 @@ useEffect(() => {
                 </div>
               </div>
 
-             <div className="personal-info-list">
+           <div className="personal-info-list">
   <div className="info-row">
-    <strong>📍 Location:</strong> {donorProfile?.city || donorProfile?.location || "N/A"}
+    <strong>📍 Location:</strong> {donorData?.city || "Not Specified"}
   </div>
   <div className="info-row">
-    <strong>📞 Contact:</strong> {donorProfile?.phone || donorProfile?.contactPhone || "No Number"}
+    <strong>📞 Contact:</strong> {donorData?.phone || donorData?.contactPhone || "No Number"}
   </div>
   <div className="info-row">
-    <strong>📧 Email:</strong> {donorProfile?.email || "No Email Found"}
+    <strong>📧 Email:</strong> {donorData?.email || "No Email Found"}
   </div>
 </div>
             </div>

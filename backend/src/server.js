@@ -15,6 +15,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+
 // 1. UPDATED: Added the specific build URL and a wildcard check
 const allowedOrigins = [
   "http://localhost:3000",
@@ -69,5 +70,7 @@ const startServer = async () => {
     console.error("❌ Unable to start server:", err);
   }
 };
+
+
 
 startServer();

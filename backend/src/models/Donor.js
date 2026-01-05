@@ -58,7 +58,16 @@ const Donor = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    resetPasswordToken: {
+  type: DataTypes.STRING,
+  allowNull: true
   },
+  resetPasswordExpires: {
+  type: DataTypes.DATE,
+  allowNull: true
+}
+  },
+  
 
   {
     tableName: "Donors",
